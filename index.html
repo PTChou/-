@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- YouTube 嵌入影片需要瀏覽器送出來源網址（Referer），否則會出現「錯誤 153」。
+     這行確保即使主機預設的安全設定比較嚴格，影片也能正常播放，請不要刪除。 -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>科學探索站</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -692,6 +695,59 @@
   @keyframes card-flash { 0%, 40% { box-shadow: 0 0 0 4px var(--accent); } 100% { box-shadow: 0 0 0 0 transparent; } }
   .vid-note { font-size: 12.5px; color: var(--ink-soft); margin: 16px 0 0; }
 
+  /* ---------- 影片播放小視窗 ---------- */
+  .video-dialog {
+    width: min(960px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 16px;
+    background: #0f1413;
+    color: #f1ead8;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+    overflow: auto;
+  }
+  .video-dialog::backdrop { background: rgba(8, 12, 11, 0.78); backdrop-filter: blur(4px); }
+  .video-dialog[open] { animation: dlg-in .2s ease-out; }
+  .vdlg-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 14px 16px 12px 20px;
+  }
+  .vdlg-title { margin: 0; font-size: clamp(16px, 2.6vw, 20px); line-height: 1.4; font-weight: 700; color: #f1ead8; }
+  .vdlg-channel { display: block; margin-top: 2px; font-family: var(--font-body); font-size: 12.5px; color: #b7c4be; font-weight: 400; }
+  .vdlg-close {
+    flex: none; width: 40px; height: 40px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: #f1ead8;
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .vdlg-close:hover { background: rgba(255,255,255,.14); }
+  .vdlg-close:focus-visible { outline: 2px solid #FF8B5C; outline-offset: 2px; }
+  .vdlg-close svg { width: 18px; height: 18px; }
+  .vdlg-player { position: relative; aspect-ratio: 16 / 9; background: #000; }
+  .vdlg-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .vdlg-local {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    display: grid; place-items: center;
+    padding: 20px;
+  }
+  .vdlg-local::before { content: ""; position: absolute; inset: 0; background: rgba(10, 14, 13, 0.78); }
+  .vdlg-local-box { position: relative; max-width: 460px; text-align: center; display: grid; gap: 12px; justify-items: center; }
+  .vdlg-local-title { margin: 0; font-size: 18px; font-weight: 700; color: #fff; }
+  .vdlg-local-text { margin: 0; font-size: 14.5px; line-height: 1.7; color: #d9e2dd; }
+  .vdlg-local .dlg-btn { text-decoration: none; }
+  .vdlg-foot {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; align-items: center;
+    padding: 12px 16px 14px;
+  }
+  .vdlg-foot .dlg-btn { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18); color: #f1ead8; text-decoration: none; }
+  .vdlg-foot .dlg-btn.primary { background: #E85B2C; border-color: #E85B2C; color: #fff; }
+  @media (max-width: 560px) {
+    .video-dialog { width: 100vw; max-width: 100vw; border-radius: 0; margin: auto 0; }
+    .vdlg-foot .dlg-btn { flex: 1 1 auto; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) { .video-dialog[open] { animation: none; } }
+
   @media print {
     :root {
       --paper: #ffffff !important; --paper-2: #f7f3e8 !important; --paper-3: #efe8d4 !important;
@@ -1022,7 +1078,7 @@
           </div>
         </article>
       </div>
-      <p class="vid-note" data-i18n="vid_note">影片來自 YouTube 上的公開頻道，按下播放後才會載入播放器；播放時使用 YouTube 的隱私強化模式。</p>
+      <p class="vid-note" data-i18n="vid_note">影片來自 YouTube 上的公開頻道，按下縮圖會跳出小視窗播放；播放器使用 YouTube 的隱私強化模式，關閉視窗影片就會停止。</p>
     </div>
   </section>
 
@@ -1196,6 +1252,21 @@
   <div class="dlg-inner" id="expDlgInner"></div>
 </dialog>
 
+<!-- ===================== 影片播放小視窗（按影片縮圖時跳出） ===================== -->
+<dialog class="video-dialog" id="videoDialog" aria-labelledby="vdlgTitle">
+  <div class="vdlg-head">
+    <h2 class="vdlg-title" id="vdlgTitle"><span id="vdlgTitleText"></span><span class="vdlg-channel" id="vdlgChannel"></span></h2>
+    <button type="button" class="vdlg-close" id="vdlgClose" data-i18n-aria="vdlg_close" aria-label="關閉影片">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="vdlg-player" id="vdlgPlayer"></div>
+  <div class="vdlg-foot">
+    <a class="dlg-btn" id="vdlgYoutube" href="#" target="_blank" rel="noopener noreferrer" data-i18n="vdlg_youtube">在 YouTube 開啟</a>
+    <button type="button" class="dlg-btn primary" id="vdlgSteps" data-i18n="vdlg_steps">查看實驗步驟</button>
+  </div>
+</dialog>
+
 <script>
 (function () {
   var dict = {
@@ -1238,7 +1309,7 @@
       vid3_title: "變色的檸檬汁：無字天書",
       vid3_desc: "示範用檸檬汁寫下看不見的字，再讓字跡顯現出來的過程，適合搭配「檸檬汁隱形墨水」實驗一起觀看。",
       vid_empty_note: "＋ 更多影片陸續新增",
-      vid_note: "影片來自 YouTube 上的公開頻道，按下播放後才會載入播放器；播放時使用 YouTube 的隱私強化模式。",
+      vid_note: "影片來自 YouTube 上的公開頻道，按下縮圖會跳出小視窗播放；播放器使用 YouTube 的隱私強化模式，關閉視窗影片就會停止。",
       vid_play: "播放影片",
       link_youtube: '在 YouTube 開啟 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
       dlg_materials: "準備材料",
@@ -1250,6 +1321,11 @@
       dlg_video: "觀看示範影片",
       dlg_print: "列印步驟",
       dlg_close: "關閉",
+      vdlg_close: "關閉影片",
+      vdlg_youtube: "在 YouTube 開啟",
+      vdlg_steps: "查看實驗步驟",
+      vdlg_local_title: "目前是本機預覽，影片無法在這裡播放",
+      vdlg_local_text: "YouTube 只允許在網站上嵌入播放影片。把網站上傳到主機（網址是 http 或 https 開頭）之後，影片就會直接在這個視窗播放。現在可以先到 YouTube 觀看。",
       fair_eyebrow: "SCIENCE FAIR · 科展靈感",
       fair_h2: "科展靈感",
       fair_p: "從觀察現象到提出假設、設計對照組，這裡收錄可延伸成科展作品的題目方向。",
@@ -1313,7 +1389,7 @@
       vid3_title: "Color-changing lemon juice: the blank-page secret",
       vid3_desc: "Writing invisible words with lemon juice and bringing them back. Pairs with the Lemon-Juice Invisible Ink experiment. (Video in Chinese.)",
       vid_empty_note: "+ More videos coming soon",
-      vid_note: "Videos come from public YouTube channels. The player only loads after you press play, and uses YouTube's privacy-enhanced mode.",
+      vid_note: "Videos come from public YouTube channels. Tap a thumbnail to play it in a pop-up window; the player uses YouTube's privacy-enhanced mode and stops when you close it.",
       vid_play: "Play video",
       link_youtube: 'Open on YouTube <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
       dlg_materials: "What you need",
@@ -1325,6 +1401,11 @@
       dlg_video: "Watch the demo video",
       dlg_print: "Print steps",
       dlg_close: "Close",
+      vdlg_close: "Close video",
+      vdlg_youtube: "Open on YouTube",
+      vdlg_steps: "See the experiment steps",
+      vdlg_local_title: "Local preview — the video can't play here",
+      vdlg_local_text: "YouTube only allows embedded playback on a website. Once the site is uploaded to a web host (an address starting with http or https), videos will play right in this window. For now, you can watch it on YouTube.",
       fair_eyebrow: "SCIENCE FAIR",
       fair_h2: "Science Fair Ideas",
       fair_p: "From observing a phenomenon to forming a hypothesis and a control group — starting points you can grow into a full project.",
@@ -1595,6 +1676,12 @@
       if (strings[key] !== undefined) el.setAttribute("aria-label", strings[key]);
     });
     if (currentExp) renderExp();
+    if (currentVideoCard) {
+      fillVideoMeta(currentVideoCard);
+      var localBox = vdlgPlayer.querySelector(".vdlg-local");
+      var ytBtn = currentVideoCard.querySelector(".yt-facade");
+      if (localBox && ytBtn) renderLocalNotice(ytBtn.getAttribute("data-yt"));
+    }
     buttons.forEach(function (b) {
       b.setAttribute("aria-pressed", b.getAttribute("data-lang") === lang ? "true" : "false");
     });
@@ -1740,14 +1827,10 @@
       var v = e.target.closest("[data-video]");
       if (v) {
         var card = document.getElementById(v.getAttribute("data-video"));
+        var trigger = lastTrigger;
         lastTrigger = null;
         closeExp();
-        if (card) {
-          card.scrollIntoView({ behavior: "smooth", block: "center" });
-          card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
-          var play = card.querySelector(".yt-facade");
-          if (play) setTimeout(function () { play.focus({ preventScroll: true }); }, 400);
-        }
+        if (card) openVideo(card, trigger);
       }
     });
   }
@@ -1765,23 +1848,106 @@
   if (hashMatch && EXPERIMENTS[hashMatch[1]]) openExp(hashMatch[1]);
 
   // ============================================================
-  // YouTube 影片：先顯示縮圖，按下播放才載入播放器（youtube-nocookie）
+  // YouTube 影片：按縮圖跳出小視窗播放（youtube-nocookie 隱私強化模式）
+  // 關閉視窗時會移除播放器，影片和聲音都會停止。
   // ============================================================
-  document.querySelectorAll(".yt-facade").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var id = btn.getAttribute("data-yt");
-      if (!/^[\w-]{6,20}$/.test(id || "")) return;
-      var media = btn.parentNode;
-      var title = media.parentNode.querySelector("h3");
+  var vdlg = document.getElementById("videoDialog");
+  var vdlgPlayer = document.getElementById("vdlgPlayer");
+  var vdlgTitleText = document.getElementById("vdlgTitleText");
+  var vdlgChannel = document.getElementById("vdlgChannel");
+  var vdlgYoutube = document.getElementById("vdlgYoutube");
+  var vdlgSteps = document.getElementById("vdlgSteps");
+  var currentVideoCard = null;
+  var videoTrigger = null;
+
+  function fillVideoMeta(card) {
+    var h3 = card.querySelector("h3");
+    var ch = card.querySelector(".tag-channel");
+    vdlgTitleText.textContent = h3 ? h3.textContent : "";
+    vdlgChannel.textContent = ch ? ch.textContent.replace(/^▶\s*/, "") : "";
+  }
+
+  function openVideo(card, trigger) {
+    var btn = card.querySelector(".yt-facade");
+    var id = btn && btn.getAttribute("data-yt");
+    if (!vdlg || !/^[\w-]{6,20}$/.test(id || "")) return;
+    currentVideoCard = card;
+    videoTrigger = trigger || btn;
+    fillVideoMeta(card);
+    vdlgYoutube.href = "https://www.youtube.com/watch?v=" + id;
+    var expKey = (card.id || "").replace(/^video-/, "");
+    vdlgSteps.hidden = !EXPERIMENTS[expKey];
+    vdlgSteps.setAttribute("data-exp-key", expKey);
+
+    vdlgPlayer.innerHTML = "";
+    if (/^https?:$/.test(location.protocol)) {
       var iframe = document.createElement("iframe");
       iframe.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0&playsinline=1";
-      iframe.title = title ? title.textContent : "YouTube video";
+      iframe.title = vdlgTitleText.textContent || "YouTube video";
       iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share";
       iframe.referrerPolicy = "strict-origin-when-cross-origin";
       iframe.allowFullscreen = true;
-      media.classList.add("playing");
-      media.replaceChild(iframe, btn);
-      iframe.focus();
+      vdlgPlayer.appendChild(iframe);
+      vdlgYoutube.hidden = false;
+    } else {
+      vdlgYoutube.hidden = true;   // 說明框裡已經有前往 YouTube 的按鈕
+      // 直接用電腦打開 HTML 檔（file://）時沒有網址可以送給 YouTube，
+      // YouTube 會拒絕嵌入播放（錯誤 153），改顯示說明和前往 YouTube 的按鈕。
+      renderLocalNotice(id);
+    }
+
+    if (!vdlg.open) {
+      if (typeof vdlg.showModal === "function") vdlg.showModal();
+      else vdlg.setAttribute("open", "");
+    }
+    document.getElementById("vdlgClose").focus();
+  }
+
+  function renderLocalNotice(id) {
+    var L = dict[currentLang] || dict.zh;
+    vdlgPlayer.innerHTML = ""
+      + '<div class="vdlg-local" style="background-image:url(https://i.ytimg.com/vi/' + id + '/hqdefault.jpg)">'
+      +   '<div class="vdlg-local-box">'
+      +     '<p class="vdlg-local-title">' + esc(L.vdlg_local_title) + '</p>'
+      +     '<p class="vdlg-local-text">' + esc(L.vdlg_local_text) + '</p>'
+      +     '<a class="dlg-btn primary" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=' + id + '">'
+      +       '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' + esc(L.vdlg_youtube) + '</a>'
+      +   '</div>'
+      + '</div>';
+  }
+
+  function closeVideo() {
+    if (!vdlg) return;
+    if (typeof vdlg.close === "function") vdlg.close();
+    else { vdlg.removeAttribute("open"); onVideoClosed(); }
+  }
+
+  function onVideoClosed() {
+    vdlgPlayer.innerHTML = "";          // 移除播放器 = 停止播放
+    currentVideoCard = null;
+    if (videoTrigger) { try { videoTrigger.focus({ preventScroll: true }); } catch (e) {} }
+    videoTrigger = null;
+  }
+
+  if (vdlg) {
+    vdlg.addEventListener("close", onVideoClosed);
+    vdlg.addEventListener("click", function (e) {
+      if (e.target === vdlg) closeVideo();   // 點視窗外的暗色背景關閉
+    });
+    document.getElementById("vdlgClose").addEventListener("click", closeVideo);
+    vdlgSteps.addEventListener("click", function () {
+      var key = vdlgSteps.getAttribute("data-exp-key");
+      var link = document.querySelector('[data-exp="' + key + '"]');
+      videoTrigger = null;
+      closeVideo();
+      lastTrigger = link;
+      openExp(key);
+    });
+  }
+
+  document.querySelectorAll(".yt-facade").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      openVideo(btn.closest(".card"), btn);
     });
   });
 

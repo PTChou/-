@@ -572,7 +572,7 @@
   .dlg-close:hover { background: var(--paper-3); }
   .dlg-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .dlg-close svg { width: 18px; height: 18px; }
-  .dlg-body { padding: 22px 24px 8px; display: grid; gap: 26px; }
+  .dlg-body { padding: 22px 24px 8px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 26px; }
   .dlg-intro { font-size: 16px; color: var(--ink-soft); margin: 0; }
   .dlg-section h3 {
     font-size: 15px; font-weight: 700; letter-spacing: .02em;
@@ -694,6 +694,34 @@
   .card.flash { animation: card-flash 1.6s ease-out; }
   @keyframes card-flash { 0%, 40% { box-shadow: 0 0 0 4px var(--accent); } 100% { box-shadow: 0 0 0 0 transparent; } }
   .vid-note { font-size: 12.5px; color: var(--ink-soft); margin: 16px 0 0; }
+
+  /* ---------- 科展研究架構 ---------- */
+  .dlg-section p.lead { margin: 0; font-size: 15px; line-height: 1.8; }
+  .q-list { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; font-size: 15px; line-height: 1.7; }
+  .var-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .var-box { border-radius: 12px; padding: 14px 14px 12px; border: 1px solid var(--line); background: var(--paper-2); }
+  .var-box b { display: block; font-size: 13px; letter-spacing: .02em; margin-bottom: 6px; }
+  .var-box p { margin: 0; font-size: 14px; line-height: 1.65; }
+  .var-box.manip { border-top: 4px solid var(--accent); }
+  .var-box.manip b { color: var(--accent-ink); }
+  .var-box.respond { border-top: 4px solid var(--sky); }
+  .var-box.respond b { color: var(--sky); }
+  .var-box.control { border-top: 4px solid var(--moss); }
+  .var-box.control b { color: var(--moss); }
+  .control-note { margin: 10px 0 0; font-size: 14px; line-height: 1.7; padding: 10px 14px; border-radius: 10px; background: var(--paper-3); }
+  .control-note b { color: var(--ink); }
+  .data-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 560px; }
+  .data-table th { background: var(--paper-3); text-align: left; font-weight: 700; padding: 9px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .data-table td { height: 34px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .data-table td:first-child { border-left: 0; }
+  .table-hint { margin: 8px 0 0; font-size: 12.5px; color: var(--ink-soft); }
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .timeline li { position: relative; padding: 0 0 14px 26px; font-size: 14.5px; line-height: 1.6; }
+  .timeline li::before { content: ""; position: absolute; left: 5px; top: 7px; width: 10px; height: 10px; border-radius: 999px; background: var(--accent); }
+  .timeline li::after { content: ""; position: absolute; left: 9px; top: 19px; bottom: 0; width: 2px; background: var(--line); }
+  .timeline li:last-child::after { display: none; }
+  @media (max-width: 640px) { .var-grid { grid-template-columns: 1fr; } }
 
   /* ---------- 影片播放小視窗 ---------- */
   .video-dialog {
@@ -1095,7 +1123,7 @@
           <h2 data-i18n="fair_h2">科展靈感</h2>
           <p data-i18n="fair_p">從觀察現象到提出假設、設計對照組，這裡收錄可延伸成科展作品的題目方向。</p>
         </div>
-        <span class="block-count" data-i18n="fair_count">3 篇範例 · 待新增更多</span>
+        <span class="block-count" data-i18n="fair_count">3 個研究題目 · 持續新增中</span>
       </div>
 
       <div class="card-grid">
@@ -1108,12 +1136,12 @@
           </div>
           <div class="card-body">
             <div class="card-tags">
-              <span class="tag tag-sample" data-i18n="tag_sample">範例</span>
               <span class="tag tag-level" data-i18n="fair1_level">生物 · 對照實驗</span>
+              <span class="tag tag-time">⏱ <span data-i18n="fair1_time">約 3–4 週</span></span>
             </div>
             <h3 data-i18n="fair1_title">光照顏色如何影響植物生長</h3>
             <p class="desc" data-i18n="fair1_desc">用不同顏色玻璃紙遮蔽光源，比較同批種子的發芽速度與莖葉長度，設計可重複測量的對照組。</p>
-            <a class="card-link" href="#" data-i18n-html="link_outline">
+            <a class="card-link" href="#fair-light" data-exp="light" data-i18n-html="link_outline">
               查看研究架構
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
@@ -1131,12 +1159,12 @@
           </div>
           <div class="card-body">
             <div class="card-tags">
-              <span class="tag tag-sample" data-i18n="tag_sample">範例</span>
               <span class="tag tag-level" data-i18n="fair2_level">物理 · 能源</span>
+              <span class="tag tag-time">⏱ <span data-i18n="fair2_time">約 2–3 週</span></span>
             </div>
             <h3 data-i18n="fair2_title">馬鈴薯電池能發多少電</h3>
             <p class="desc" data-i18n="fair2_desc">串聯不同數量的馬鈴薯電池，量測電壓變化，探討蔬果種類與電極金屬對發電量的影響。</p>
-            <a class="card-link" href="#" data-i18n-html="link_outline">
+            <a class="card-link" href="#fair-potato" data-exp="potato" data-i18n-html="link_outline">
               查看研究架構
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
@@ -1152,18 +1180,20 @@
           </div>
           <div class="card-body">
             <div class="card-tags">
-              <span class="tag tag-sample" data-i18n="tag_sample">範例</span>
               <span class="tag tag-level" data-i18n="fair3_level">化學 · 密度</span>
+              <span class="tag tag-time">⏱ <span data-i18n="fair3_time">約 2 週</span></span>
             </div>
             <h3 data-i18n="fair3_title">液體密度分層水柱</h3>
             <p class="desc" data-i18n="fair3_desc">測量蜂蜜、洗碗精、水、油、酒精的密度並疊出分層柱，延伸探討溫度或濃度對分層穩定性的影響。</p>
-            <a class="card-link" href="#" data-i18n-html="link_outline">
+            <a class="card-link" href="#fair-density" data-exp="density" data-i18n-html="link_outline">
               查看研究架構
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>
         </article>
-        <!-- 在此新增更多科展靈感卡片 -->
+        <!-- 新增科展題目：複製上方一個 <article class="card">…</article>，
+             把連結改成 data-exp="新代號"、href="#fair-新代號"，
+             再到頁尾 <script> 的 FAIR 裡補上同代號的研究架構。 -->
       </div>
     </div>
   </section>
@@ -1322,6 +1352,23 @@
       dlg_print: "列印步驟",
       dlg_close: "關閉",
       vdlg_close: "關閉影片",
+      f_grade: "建議年級：",
+      f_motivation: "研究動機",
+      f_questions: "研究問題",
+      f_hypothesis: "研究假設",
+      f_variables: "變因設計",
+      f_manip: "操縱變因（我改變的）",
+      f_respond: "應變變因（我測量的）",
+      f_control: "控制變因（保持相同的）",
+      f_control_group: "對照組：",
+      f_materials: "材料與設備",
+      f_steps: "研究步驟",
+      f_table: "數據記錄表",
+      f_table_hint: "可以按「列印研究架構」把這張表印出來，實驗時直接填寫。",
+      f_analysis: "結果怎麼分析",
+      f_extend: "延伸研究方向",
+      f_timeline: "建議時程",
+      f_print: "列印研究架構",
       vdlg_youtube: "在 YouTube 開啟",
       vdlg_steps: "查看實驗步驟",
       vdlg_local_title: "目前是本機預覽，影片無法在這裡播放",
@@ -1329,7 +1376,8 @@
       fair_eyebrow: "SCIENCE FAIR · 科展靈感",
       fair_h2: "科展靈感",
       fair_p: "從觀察現象到提出假設、設計對照組，這裡收錄可延伸成科展作品的題目方向。",
-      fair_count: "3 篇範例 · 待新增更多",
+      fair_count: "3 個研究題目 · 持續新增中",
+      fair1_time: "約 3–4 週", fair2_time: "約 2–3 週", fair3_time: "約 2 週",
       fair1_level: "生物 · 對照實驗",
       fair1_title: "光照顏色如何影響植物生長",
       fair1_desc: "用不同顏色玻璃紙遮蔽光源，比較同批種子的發芽速度與莖葉長度，設計可重複測量的對照組。",
@@ -1402,6 +1450,23 @@
       dlg_print: "Print steps",
       dlg_close: "Close",
       vdlg_close: "Close video",
+      f_grade: "Suggested: ",
+      f_motivation: "Why this project?",
+      f_questions: "Research questions",
+      f_hypothesis: "Hypotheses",
+      f_variables: "Variables",
+      f_manip: "Independent variable (what you change)",
+      f_respond: "Dependent variable (what you measure)",
+      f_control: "Controlled variables (kept the same)",
+      f_control_group: "Control group: ",
+      f_materials: "Materials & equipment",
+      f_steps: "Procedure",
+      f_table: "Data table",
+      f_table_hint: "Use \"Print outline\" to print this table and fill it in during the experiment.",
+      f_analysis: "Analyzing the results",
+      f_extend: "Take it further",
+      f_timeline: "Suggested timeline",
+      f_print: "Print outline",
       vdlg_youtube: "Open on YouTube",
       vdlg_steps: "See the experiment steps",
       vdlg_local_title: "Local preview — the video can't play here",
@@ -1409,7 +1474,8 @@
       fair_eyebrow: "SCIENCE FAIR",
       fair_h2: "Science Fair Ideas",
       fair_p: "From observing a phenomenon to forming a hypothesis and a control group — starting points you can grow into a full project.",
-      fair_count: "3 samples · more coming",
+      fair_count: "3 project ideas · more coming",
+      fair1_time: "3–4 weeks", fair2_time: "2–3 weeks", fair3_time: "About 2 weeks",
       fair1_level: "Biology · controlled trial",
       fair1_title: "Does Light Color Affect Plant Growth?",
       fair1_desc: "Filter light through colored cellophane and compare germination speed and stem length across a repeatable control group.",
@@ -1652,6 +1718,391 @@
     }
   };
 
+  // ============================================================
+  // 科展研究架構資料
+  // ------------------------------------------------------------
+  // 點科展卡片上的「查看研究架構」會打開彈出視窗，內容就從這裡讀取。
+  // 新增題目：複製一整段（例如 light: {...}），改一個新的英文代號，
+  // 再到 HTML 的科展卡片把連結寫成 data-exp="新代號"、href="#fair-新代號"。
+  // （代號不要和上面 EXPERIMENTS 的代號重複）
+  // ============================================================
+  var FAIR = {
+    light: {
+      zh: {
+        title: "光照顏色如何影響植物生長",
+        field: "生物 · 對照實驗", grade: "國小中年級以上", time: "約 3–4 週",
+        intro: "植物靠光進行光合作用，但光有不同的顏色。這個研究用彩色玻璃紙過濾光線，比較綠豆苗在紅光、藍光、綠光和一般白光下的生長差異。",
+        motivation: "窗邊的植物會往有光的方向長，那光的「顏色」重要嗎？葉子看起來是綠色，代表葉子把綠光反射掉了，那綠光對植物還有用嗎？",
+        questions: [
+          "在紅光、藍光、綠光與一般白光下，綠豆苗的莖長、葉片顏色和重量有什麼不同？",
+          "哪一種顏色的光最有利於綠豆苗健康生長？"
+        ],
+        hypothesis: [
+          "紅光組和藍光組的苗會比綠光組健康，因為葉綠素主要吸收紅光和藍光。",
+          "綠光組和全黑組的莖可能長得細長、葉子偏黃（稱為「徒長」），所以「長得高」不一定代表「長得好」。"
+        ],
+        manip: "光的顏色：紅、藍、綠、透明玻璃紙，以及全黑（共 5 組）",
+        respond: "發芽率、莖長（公分）、葉片顏色、第 14 天的鮮重（公克）",
+        control: "同一包綠豆、每杯種子數、棉花或土壤的量、每天澆水量與時間、擺放位置與溫度、玻璃紙層數",
+        controlGroup: "透明玻璃紙組接受一般白光，是主要的對照組，用來和有顏色的光比較；全黑組則可以看出完全沒有光時會怎樣。",
+        materials: [
+          "綠豆種子 約 100 顆（同一包）",
+          "透明塑膠杯 15 個（每組 3 杯）",
+          "化妝棉或培養土",
+          "紅、藍、綠、透明玻璃紙各數張",
+          "黑色紙或鋁箔（全黑組用）",
+          "橡皮筋或膠帶",
+          "尺（最小刻度 1 毫米）",
+          "電子秤（能量到 0.1 公克更好）",
+          "（可選）手機照度計 App",
+          "記錄表、手機或相機"
+        ],
+        steps: [
+          "綠豆泡水 8 小時，挑出大小相近、外觀完整的種子。",
+          "每個杯子放入等量的化妝棉或土壤，每杯放 6 顆種子，並貼上組別與杯號。",
+          "每組 3 杯（重複實驗），分別用紅、藍、綠、透明玻璃紙把杯子上方與側面包起來；全黑組用黑紙或鋁箔包住。各組玻璃紙的層數要一樣。",
+          "把所有杯子放在同一個窗邊或同一盞燈下，彼此隔開避免互相遮光；每 2–3 天輪換位置，讓各組受光的機會平均。",
+          "每天固定時間澆等量的水，並記錄當天溫度。",
+          "每天記錄發芽數；發芽後每 2 天量一次每株的莖長，並拍照記錄葉片顏色。",
+          "第 14 天把苗取出、輕輕擦乾，秤每杯的總鮮重。",
+          "計算每組的平均值，整理成表格和圖表。"
+        ],
+        table: ["第幾天", "組別", "杯號", "發芽數", "平均莖長（cm）", "葉片顏色", "備註"],
+        analysis: [
+          "用長條圖比較各組第 14 天的平均莖長和平均鮮重；用折線圖畫出每組莖長隨天數的變化。",
+          "看看同一組 3 杯的數據是否接近；如果差很多，想一想可能的原因。",
+          "注意：彩色玻璃紙也會讓光變暗。如果有照度計 App，量一下各組的亮度，討論結果是「顏色」還是「亮度」造成的。"
+        ],
+        safety: [
+          "發霉的杯子要拿出來並記錄原因，實驗用的豆苗不要食用。",
+          "如果用檯燈照光，燈泡不要貼近玻璃紙，避免過熱。"
+        ],
+        extend: [
+          "改用彩色 LED 燈並調成相同亮度，排除「亮度不同」的影響。",
+          "換成其他植物（如豌豆苗、蘿蔔嬰），結果還一樣嗎？",
+          "固定光的顏色，改變每天照光的時數，探討照光時間的影響。"
+        ],
+        timeline: [
+          "第 1 週：查資料、準備材料、做好遮光裝置，先試種一次",
+          "第 2–3 週：正式實驗，每天記錄",
+          "第 4 週：整理數據、畫圖表、寫結論和海報"
+        ]
+      },
+      en: {
+        title: "Does Light Color Affect Plant Growth?",
+        field: "Biology · controlled trial", grade: "Ages 9+", time: "About 3–4 weeks",
+        intro: "Plants use light for photosynthesis, but light comes in different colors. This project filters light through colored cellophane and compares how mung bean sprouts grow under red, blue, green, and ordinary white light.",
+        motivation: "Plants on a windowsill lean toward the light — but does the color of that light matter? Leaves look green because they reflect green light. So is green light any use to a plant?",
+        questions: [
+          "Under red, blue, green, and white light, how do mung bean sprouts differ in stem length, leaf color, and weight?",
+          "Which color of light helps the sprouts grow healthiest?"
+        ],
+        hypothesis: [
+          "Sprouts under red and blue light will be healthier than those under green, because chlorophyll mostly absorbs red and blue light.",
+          "Sprouts under green light and in total darkness may grow tall, thin, and yellowish (called etiolation) — so taller doesn't necessarily mean healthier."
+        ],
+        manip: "Light color: red, blue, green, clear cellophane, and total darkness (5 groups)",
+        respond: "Germination rate, stem length (cm), leaf color, fresh weight on day 14 (g)",
+        control: "Same bag of seeds, seeds per cup, amount of cotton or soil, daily water amount and time, location and temperature, number of cellophane layers",
+        controlGroup: "The clear-cellophane group gets ordinary white light and is the main control to compare the colors against. The dark group shows what happens with no light at all.",
+        materials: [
+          "About 100 mung beans (from the same bag)",
+          "15 clear plastic cups (3 per group)",
+          "Cotton pads or potting soil",
+          "Red, blue, green, and clear cellophane sheets",
+          "Black paper or aluminum foil (dark group)",
+          "Rubber bands or tape",
+          "Ruler (1 mm markings)",
+          "Digital scale (0.1 g is best)",
+          "(Optional) A light-meter phone app",
+          "Record sheet and a phone or camera"
+        ],
+        steps: [
+          "Soak the beans for 8 hours and pick ones of similar size with no damage.",
+          "Put the same amount of cotton or soil in each cup, add 6 beans per cup, and label each cup with its group and number.",
+          "Make 3 cups per group (replicates). Wrap the top and sides of each cup in red, blue, green, or clear cellophane; wrap the dark group in black paper or foil. Use the same number of layers for every group.",
+          "Place all cups at the same window or under the same lamp, spaced so they don't shade each other. Rotate their positions every 2–3 days so every group gets a fair share of light.",
+          "Water each cup with the same amount at the same time every day, and note the temperature.",
+          "Count sprouted seeds daily. After sprouting, measure every stem every 2 days and photograph the leaf color.",
+          "On day 14, gently remove the sprouts, pat them dry, and weigh each cup's total.",
+          "Work out each group's averages and organize them into tables and charts."
+        ],
+        table: ["Day", "Group", "Cup", "Sprouted", "Avg. stem (cm)", "Leaf color", "Notes"],
+        analysis: [
+          "Use a bar chart to compare each group's average stem length and weight on day 14, and a line chart to show how stem length changed over time.",
+          "Check whether the 3 cups in each group agree. If they're very different, think about why.",
+          "Watch out: colored cellophane also makes light dimmer. If you have a light-meter app, measure each group's brightness and discuss whether color or brightness caused the results."
+        ],
+        safety: [
+          "Remove any moldy cups and record why. Don't eat the sprouts from the experiment.",
+          "If you use a desk lamp, keep the bulb away from the cellophane so it doesn't overheat."
+        ],
+        extend: [
+          "Use colored LED bulbs set to the same brightness to rule out the brightness difference.",
+          "Try other plants, like pea shoots or radish sprouts. Are the results the same?",
+          "Keep one color and change how many hours of light the plants get each day."
+        ],
+        timeline: [
+          "Week 1: Research, gather materials, build the light filters, and do a trial run",
+          "Weeks 2–3: Run the experiment and record daily",
+          "Week 4: Organize data, make charts, write conclusions and the poster"
+        ]
+      }
+    },
+
+    potato: {
+      zh: {
+        title: "馬鈴薯電池能發多少電",
+        field: "物理 · 能源", grade: "國小高年級–國中", time: "約 2–3 週",
+        intro: "把兩種不同的金屬插進馬鈴薯，就能產生微弱的電。這個研究用三用電錶測量電壓和電流，找出串聯數量、電極金屬和蔬果種類對發電量的影響。",
+        motivation: "電池裡面到底發生了什麼事？為什麼一顆馬鈴薯插上兩片金屬就會有電？如果想點亮一顆 LED 燈，需要幾顆馬鈴薯？",
+        questions: [
+          "串聯的馬鈴薯數量增加時，總電壓怎麼變化？",
+          "換成不同的金屬組合當電極，電壓會不同嗎？",
+          "用檸檬、蘋果、番茄等其他蔬果，發電量和馬鈴薯比起來如何？"
+        ],
+        hypothesis: [
+          "串聯越多顆，總電壓越高，而且大約是一顆電壓的倍數。",
+          "兩種金屬的差異越大，電壓越高；兩根電極用相同金屬時，幾乎量不到電壓。",
+          "汁液比較多的蔬果，電流可能比較大。"
+        ],
+        manip: "分三部分，每部分只改變一個條件：①串聯數量（1–5 顆）②電極金屬組合 ③蔬果種類",
+        respond: "電壓（V）、電流（mA）、能否點亮 LED",
+        control: "電極插入深度與間距、電極大小、蔬果大小與溫度、插入後等 1 分鐘再讀數、使用同一台三用電錶",
+        controlGroup: "兩根電極都用銅片的「銅－銅」組合，理論上幾乎沒有電壓，可以證明電來自「兩種不同的金屬」，而不是馬鈴薯本身。",
+        materials: [
+          "馬鈴薯 5 顆以上（大小相近）",
+          "檸檬、蘋果、番茄各 1–2 個",
+          "鍍鋅鐵釘（鋅電極）5 根以上",
+          "銅片或粗銅線（銅電極）5 片以上",
+          "鋁片、未鍍鋅的鐵釘（比較電極用）",
+          "鱷魚夾電線 10 條",
+          "三用電錶（可量直流電壓和毫安培電流）",
+          "紅色 LED 燈 1–2 顆",
+          "尺、砂紙"
+        ],
+        steps: [
+          "用砂紙把所有電極磨亮，去掉表面的氧化層。",
+          "在一顆馬鈴薯上插入鍍鋅鐵釘和銅片，兩者相距約 3 公分、插入深度約 2 公分。",
+          "三用電錶切到直流電壓檔，紅色測棒接銅片、黑色測棒接鐵釘，等 1 分鐘後記錄電壓。",
+          "第一部分：用鱷魚夾把「前一顆的銅片」接到「下一顆的鐵釘」，依序串聯 2、3、4、5 顆，每次記錄總電壓。",
+          "把電錶切到電流（mA）檔，測量 1 顆和 5 顆串聯時的電流；再接上 LED（長腳接銅片那一端），觀察會不會亮。",
+          "第二部分：換新的馬鈴薯，分別測「鋅－銅」「鐵－銅」「鋁－銅」「銅－銅」四種電極組合的電壓。",
+          "第三部分：用鋅－銅電極，分別測檸檬、蘋果、番茄的電壓和電流。",
+          "每個條件至少測 3 次，計算平均值。"
+        ],
+        table: ["實驗條件", "第 1 次（V）", "第 2 次（V）", "第 3 次（V）", "平均電壓（V）", "電流（mA）", "LED 亮嗎"],
+        analysis: [
+          "畫折線圖：橫軸是串聯顆數，縱軸是總電壓，看看是不是接近一條直線。",
+          "用長條圖比較不同電極組合、不同蔬果的平均電壓和電流。",
+          "想一想：為什麼電壓夠了，LED 還是可能很暗？（提示：比較電流的大小。）國中生可以用「功率＝電壓×電流」比較發電量。"
+        ],
+        safety: [
+          "只能用蔬果和電錶做實驗，絕對不要把電線接到家用插座。",
+          "插過金屬的蔬果含有金屬離子，實驗後不可食用，直接丟棄。",
+          "鐵釘和銅片的邊緣很利，建議由大人協助插入。"
+        ],
+        extend: [
+          "把馬鈴薯煮過再測，發電量會改變嗎？",
+          "把馬鈴薯切成兩半、四塊，每一塊當成一個電池，和整顆比較。",
+          "改變電極之間的距離或插入深度，探討對電流的影響。"
+        ],
+        timeline: [
+          "第 1 週：學會使用三用電錶、準備材料、試測一次",
+          "第 2 週：完成三個部分的實驗",
+          "第 3 週：整理數據、畫圖表、寫結論和海報"
+        ]
+      },
+      en: {
+        title: "How Much Power Can a Potato Battery Make?",
+        field: "Physics · energy", grade: "Ages 10–15", time: "About 2–3 weeks",
+        intro: "Push two different metals into a potato and it makes a small electric current. This project uses a multimeter to measure voltage and current, and finds out how the number of potatoes, the electrode metals, and the type of produce change the output.",
+        motivation: "What actually happens inside a battery? Why does a potato with two pieces of metal in it produce electricity? And how many potatoes would it take to light an LED?",
+        questions: [
+          "How does total voltage change as you connect more potatoes in series?",
+          "Does using a different pair of metals change the voltage?",
+          "How do lemons, apples, and tomatoes compare with potatoes?"
+        ],
+        hypothesis: [
+          "More potatoes in series will give a higher total voltage — roughly a multiple of one potato's voltage.",
+          "The more different the two metals are, the higher the voltage. With two electrodes of the same metal, there will be almost no voltage.",
+          "Juicier produce may give a larger current."
+        ],
+        manip: "Three parts, changing only one thing in each: ① number in series (1–5) ② electrode metal pair ③ type of produce",
+        respond: "Voltage (V), current (mA), whether an LED lights up",
+        control: "Electrode depth and spacing, electrode size, produce size and temperature, waiting 1 minute before reading, using the same multimeter",
+        controlGroup: "A copper–copper pair should give almost no voltage. It shows the electricity comes from having two different metals, not from the potato itself.",
+        materials: [
+          "At least 5 potatoes of similar size",
+          "1–2 each of lemons, apples, and tomatoes",
+          "At least 5 galvanized (zinc-coated) nails",
+          "At least 5 copper strips or thick copper wire",
+          "Aluminum strips and plain (uncoated) iron nails for comparison",
+          "10 alligator-clip leads",
+          "Multimeter (DC volts and milliamps)",
+          "1–2 red LEDs",
+          "Ruler and sandpaper"
+        ],
+        steps: [
+          "Sand all the electrodes until shiny to remove any oxide layer.",
+          "Push a galvanized nail and a copper strip into one potato, about 3 cm apart and 2 cm deep.",
+          "Set the multimeter to DC volts. Touch the red probe to the copper and the black probe to the nail, wait 1 minute, and record the voltage.",
+          "Part 1: Use clip leads to connect one potato's copper to the next potato's nail. Build chains of 2, 3, 4, and 5 potatoes, recording the total voltage each time.",
+          "Switch the meter to milliamps and measure the current from 1 potato and from 5 in series. Then connect an LED (long leg to the copper end) and see if it lights.",
+          "Part 2: With fresh potatoes, measure the voltage for zinc–copper, iron–copper, aluminum–copper, and copper–copper pairs.",
+          "Part 3: Using zinc–copper electrodes, measure the voltage and current of the lemon, apple, and tomato.",
+          "Test each condition at least 3 times and calculate the average."
+        ],
+        table: ["Condition", "Trial 1 (V)", "Trial 2 (V)", "Trial 3 (V)", "Avg. voltage (V)", "Current (mA)", "LED lit?"],
+        analysis: [
+          "Draw a line graph with the number of potatoes on the x-axis and total voltage on the y-axis. Is it close to a straight line?",
+          "Use bar charts to compare average voltage and current for each metal pair and each type of produce.",
+          "Think about it: why might an LED stay dim even when the voltage is high enough? (Hint: look at the current.) Older students can compare output using power = voltage × current."
+        ],
+        safety: [
+          "Only use produce and a multimeter. Never connect anything to a wall outlet.",
+          "Produce that has had metal in it contains metal ions. Don't eat it — throw it away.",
+          "Nails and copper strips have sharp edges. Ask an adult to help push them in."
+        ],
+        extend: [
+          "Boil a potato first and test again. Does the output change?",
+          "Cut a potato into halves or quarters and use each piece as a separate cell. Compare with a whole potato.",
+          "Change the distance between electrodes or how deep they go, and see how the current changes."
+        ],
+        timeline: [
+          "Week 1: Learn to use the multimeter, gather materials, and do a trial run",
+          "Week 2: Complete all three parts",
+          "Week 3: Organize data, make charts, write conclusions and the poster"
+        ]
+      }
+    },
+
+    density: {
+      zh: {
+        title: "液體密度分層水柱",
+        field: "化學 · 密度", grade: "國小高年級–國中", time: "約 2 週",
+        intro: "為什麼油會浮在水上？這個研究先測量五種常見液體的密度，預測它們疊在一起的順序，再做出分層水柱，最後探討溫度會不會讓分層改變。",
+        motivation: "煮湯時油總是浮在上面，蜂蜜倒進水裡會沉下去。液體的「輕重」可以測量嗎？只要知道數字，能不能事先預測誰在上、誰在下？",
+        questions: [
+          "蜂蜜、洗碗精、水、食用油、酒精的密度各是多少？",
+          "依照密度的大小，能不能正確預測分層的順序？",
+          "溫度改變時，分層水柱的分界會不會變得不清楚？"
+        ],
+        hypothesis: [
+          "密度越大的液體沉得越下面。預測由下到上依序是：蜂蜜、洗碗精、水、食用油、酒精。",
+          "溫度比較高時，液體比較容易互相擴散，分界可能變得比較模糊。"
+        ],
+        manip: "第一部分：液體種類；第二部分：溫度（冰箱、室溫、約 40°C 溫水浴）",
+        respond: "第一部分：密度（g/mL）；第二部分：各層分界的清楚程度（拍照比較）與各層厚度",
+        control: "量取的體積、使用同一台秤、各液體的量、倒入的順序和方法、容器的形狀和大小",
+        controlGroup: "放在室溫、不移動的水柱是對照組，用來和放進冰箱或溫水浴的水柱比較。",
+        materials: [
+          "蜂蜜、洗碗精、水、食用油、藥用酒精（75%）各約 100 毫升",
+          "食用色素 2 種（幫水和酒精上色）",
+          "量筒或有刻度的量杯",
+          "電子秤（最小單位 0.1 公克）",
+          "細長透明玻璃杯或量筒 3 個",
+          "湯匙、滴管",
+          "溫度計",
+          "保鮮盒 2 個（做冰水浴和溫水浴）"
+        ],
+        steps: [
+          "把空量杯放到電子秤上，按「歸零」。",
+          "倒入 50 毫升的第一種液體，讀出質量（公克）並記錄。",
+          "計算密度：密度＝質量÷體積（g/mL）。每種液體都測 3 次取平均。",
+          "依照密度由大到小，寫下你預測的分層順序。",
+          "在水和酒精裡各滴入不同顏色的食用色素，方便辨認。",
+          "在細長玻璃杯中，先倒密度最大的蜂蜜，直接倒進杯底中央，不要沾到杯壁。",
+          "接下來的液體，都用湯匙背面貼著杯壁，讓液體沿著湯匙慢慢流下，每層約 2 公分。",
+          "倒完後靜置 10 分鐘並拍照，比較實際順序和預測是否一樣。",
+          "做 3 杯相同的水柱，分別放在冰箱、室溫、約 40°C 的溫水浴中 30 分鐘，每 10 分鐘拍照比較分界的變化。"
+        ],
+        table: ["液體", "體積（mL）", "質量 1（g）", "質量 2（g）", "質量 3（g）", "平均質量（g）", "密度（g/mL）"],
+        analysis: [
+          "用長條圖比較五種液體的密度，並和分層照片放在一起對照。",
+          "如果實際順序和預測不同，檢查量體積、讀數或倒入的方法有沒有誤差。",
+          "把自己量到的密度和書上或網路上的參考值比較，算出差距，並討論誤差可能的來源。",
+          "比較不同溫度下的照片，描述分界清楚程度的變化。"
+        ],
+        safety: [
+          "酒精很容易燃燒，整個實驗都不能靠近火源；溫水浴請用熱水瓶的熱水，不要在爐火上加熱。",
+          "溫水浴的水溫由大人準備並確認，避免燙傷。",
+          "實驗用的液體不可飲用，做完用清水和洗碗精清洗器材。"
+        ],
+        extend: [
+          "用不同濃度的糖水（每杯水加入 0、2、4、6 匙糖）做出「彩虹糖水柱」，探討濃度和密度的關係。",
+          "把小物體（葡萄、塑膠珠、小番茄）放進分層水柱，先預測它們會停在哪一層。",
+          "比較不同品牌的蜂蜜或洗碗精，密度一樣嗎？"
+        ],
+        timeline: [
+          "第 1 週：練習使用電子秤和量筒、測量密度、做出第一杯水柱",
+          "第 2 週：溫度實驗、整理數據、製作圖表和海報"
+        ]
+      },
+      en: {
+        title: "Layered Liquid Density Column",
+        field: "Chemistry · density", grade: "Ages 10–15", time: "About 2 weeks",
+        intro: "Why does oil float on water? This project measures the density of five everyday liquids, predicts the order they'll stack in, builds a layered column, and then tests whether temperature changes the layers.",
+        motivation: "Oil always floats on top of soup, and honey sinks in water. Can we measure how \"heavy\" a liquid is? If we know the numbers, can we predict which liquid ends up on top?",
+        questions: [
+          "What are the densities of honey, dish soap, water, cooking oil, and rubbing alcohol?",
+          "Can density predict the order of the layers correctly?",
+          "When the temperature changes, do the boundaries between layers become less clear?"
+        ],
+        hypothesis: [
+          "Denser liquids will sink lower. From bottom to top the predicted order is: honey, dish soap, water, cooking oil, alcohol.",
+          "At higher temperatures the liquids mix into each other more easily, so the boundaries may blur."
+        ],
+        manip: "Part 1: type of liquid. Part 2: temperature (fridge, room temperature, ~40 °C warm bath)",
+        respond: "Part 1: density (g/mL). Part 2: how sharp the layer boundaries are (compared by photo) and layer thickness",
+        control: "Volume measured, same scale, amount of each liquid, pouring order and method, container shape and size",
+        controlGroup: "A column left undisturbed at room temperature is the control, compared with columns placed in the fridge or the warm bath.",
+        materials: [
+          "About 100 mL each of honey, dish soap, water, cooking oil, and 75% rubbing alcohol",
+          "Food coloring in 2 colors (for the water and the alcohol)",
+          "Graduated cylinder or measuring cup",
+          "Digital scale (0.1 g)",
+          "3 tall, narrow clear glasses or cylinders",
+          "Spoon and dropper",
+          "Thermometer",
+          "2 plastic tubs (for the ice bath and warm bath)"
+        ],
+        steps: [
+          "Put an empty measuring cup on the scale and press \"tare\" to zero it.",
+          "Pour in 50 mL of the first liquid, read the mass in grams, and record it.",
+          "Calculate density: density = mass ÷ volume (g/mL). Measure each liquid 3 times and average.",
+          "Write down the order you predict, from highest density to lowest.",
+          "Add a different food coloring to the water and to the alcohol so you can tell them apart.",
+          "In a tall glass, pour the densest liquid, honey, straight into the center of the bottom without touching the sides.",
+          "For each following liquid, hold the back of a spoon against the inside of the glass and let the liquid run slowly down it. Make each layer about 2 cm.",
+          "Let it stand for 10 minutes, then photograph it. Does the real order match your prediction?",
+          "Build 3 identical columns. Put one in the fridge, one at room temperature, and one in a ~40 °C warm bath for 30 minutes, photographing every 10 minutes to compare the boundaries."
+        ],
+        table: ["Liquid", "Volume (mL)", "Mass 1 (g)", "Mass 2 (g)", "Mass 3 (g)", "Avg. mass (g)", "Density (g/mL)"],
+        analysis: [
+          "Use a bar chart to compare the five densities, and put it next to your column photos.",
+          "If the real order differs from your prediction, check your volume readings, scale readings, and pouring method.",
+          "Compare your measured densities with reference values from books or websites, calculate the difference, and discuss where errors could come from.",
+          "Compare the photos at different temperatures and describe how the boundaries changed."
+        ],
+        safety: [
+          "Alcohol catches fire easily. Keep the whole experiment away from flames, and use hot water from a kettle or dispenser for the warm bath — don't heat anything on a stove.",
+          "An adult should prepare and check the warm bath to avoid scalds.",
+          "Don't drink any of the liquids. Wash everything with water and dish soap afterwards."
+        ],
+        extend: [
+          "Make a rainbow column from sugar water at different strengths (0, 2, 4, and 6 spoons of sugar per cup) to explore how concentration affects density.",
+          "Drop small objects (a grape, a plastic bead, a cherry tomato) into the column. Predict which layer each will stop in first.",
+          "Compare different brands of honey or dish soap. Are their densities the same?"
+        ],
+        timeline: [
+          "Week 1: Practice with the scale and cylinder, measure densities, build your first column",
+          "Week 2: Temperature experiment, organize data, make charts and the poster"
+        ]
+      }
+    }
+  };
+
   var currentExp = null;
 
   var STORAGE_KEY = "science-station-lang";
@@ -1743,15 +2194,69 @@
     return items.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("");
   }
 
+  function renderFair() {
+    var f = FAIR[currentExp];
+    var t = f[currentLang] || f.zh;
+    var L = dict[currentLang] || dict.zh;
+    var mats = t.materials.map(function (m) {
+      return '<li><label><input type="checkbox"><span>' + esc(m) + "</span></label></li>";
+    }).join("");
+    var th = t.table.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("");
+    var emptyRow = "<tr>" + t.table.map(function () { return "<td></td>"; }).join("") + "</tr>";
+    var tl = t.timeline.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("");
+    var H = function (icon, label) { return "<h3>" + icon + esc(label) + "</h3>"; };
+    return ""
+      + '<div class="dlg-head"><div>'
+      +   '<div class="card-tags">'
+      +     '<span class="tag tag-level">' + esc(t.field) + "</span>"
+      +     '<span class="tag tag-subject">' + esc(L.f_grade) + esc(t.grade) + "</span>"
+      +     '<span class="tag tag-time">⏱ ' + esc(t.time) + "</span>"
+      +   "</div>"
+      +   '<h2 id="expDlgTitle">' + esc(t.title) + "</h2>"
+      + "</div>"
+      + '<button type="button" class="dlg-close" data-close aria-label="' + esc(L.dlg_close) + '">' + ICON.close + "</button>"
+      + "</div>"
+      + '<div class="dlg-body">'
+      +   '<p class="dlg-intro">' + esc(t.intro) + "</p>"
+      +   '<section class="dlg-section">' + H(ICON.bulb.replace('currentColor', 'var(--accent)'), L.f_motivation) + '<p class="lead">' + esc(t.motivation) + "</p></section>"
+      +   '<section class="dlg-section">' + H(ICON.flask, L.f_questions) + '<ol class="q-list">' + li(t.questions) + "</ol></section>"
+      +   '<section class="dlg-section">' + H(ICON.steps, L.f_hypothesis) + '<ul class="q-list">' + li(t.hypothesis) + "</ul></section>"
+      +   '<section class="dlg-section">' + H(ICON.box, L.f_variables)
+      +     '<div class="var-grid">'
+      +       '<div class="var-box manip"><b>' + esc(L.f_manip) + "</b><p>" + esc(t.manip) + "</p></div>"
+      +       '<div class="var-box respond"><b>' + esc(L.f_respond) + "</b><p>" + esc(t.respond) + "</p></div>"
+      +       '<div class="var-box control"><b>' + esc(L.f_control) + "</b><p>" + esc(t.control) + "</p></div>"
+      +     "</div>"
+      +     '<p class="control-note"><b>' + esc(L.f_control_group) + "</b>" + esc(t.controlGroup) + "</p>"
+      +   "</section>"
+      +   '<section class="dlg-section">' + H(ICON.box, L.f_materials) + '<ul class="mat-list">' + mats + "</ul></section>"
+      +   '<section class="dlg-section">' + H(ICON.steps, L.f_steps) + '<ol class="step-list">' + li(t.steps) + "</ol></section>"
+      +   '<section class="dlg-section callout callout-safety">' + H(ICON.warn, L.dlg_safety) + "<ul>" + li(t.safety) + "</ul></section>"
+      +   '<section class="dlg-section">' + H(ICON.steps, L.f_table)
+      +     '<div class="data-table-wrap"><table class="data-table"><thead><tr>' + th + "</tr></thead><tbody>"
+      +       emptyRow + emptyRow + emptyRow + emptyRow + "</tbody></table></div>"
+      +     '<p class="table-hint">' + esc(L.f_table_hint) + "</p>"
+      +   "</section>"
+      +   '<section class="dlg-section callout callout-why">' + H(ICON.bulb, L.f_analysis) + "<ul>" + li(t.analysis) + "</ul></section>"
+      +   '<section class="dlg-section">' + H(ICON.flask, L.f_extend) + '<ul class="try-list">' + li(t.extend) + "</ul></section>"
+      +   '<section class="dlg-section">' + H(ICON.steps, L.f_timeline) + '<ol class="timeline">' + tl + "</ol></section>"
+      + "</div>"
+      + '<div class="dlg-actions">'
+      +   '<button type="button" class="dlg-btn primary" data-print>' + ICON.print + esc(L.f_print) + "</button>"
+      + "</div>";
+  }
+
   function renderExp() {
     var exp = EXPERIMENTS[currentExp];
-    if (!exp) return;
+    if (!exp && !FAIR[currentExp]) return;
+    var html;
+    if (!exp) { html = renderFair(); } else {
     var t = exp[currentLang] || exp.zh;
     var L = dict[currentLang] || dict.zh;
     var mats = t.materials.map(function (m) {
       return '<li><label><input type="checkbox"><span>' + esc(m) + "</span></label></li>";
     }).join("");
-    var html = ""
+    html = ""
       + '<div class="dlg-head"><div>'
       +   '<div class="card-tags">'
       +     '<span class="tag tag-subject">' + esc(t.subject) + "</span>"
@@ -1782,6 +2287,7 @@
       +   '<button type="button" class="dlg-btn" data-print>' + ICON.print + esc(L.dlg_print) + "</button>"
       +   (exp.video ? '<button type="button" class="dlg-btn primary" data-video="' + esc(exp.video) + '">' + ICON.play + esc(L.dlg_video) + "</button>" : "")
       + "</div>";
+    }
 
     // 切換語言時保留已打勾的材料
     var checked = Array.prototype.map.call(dlgInner.querySelectorAll(".mat-list input"), function (c) { return c.checked; });
@@ -1792,7 +2298,7 @@
   }
 
   function openExp(id) {
-    if (!EXPERIMENTS[id] || !dlg) return;
+    if ((!EXPERIMENTS[id] && !FAIR[id]) || !dlg) return;
     if (currentExp !== id) dlgInner.innerHTML = "";
     currentExp = id;
     renderExp();
@@ -1801,7 +2307,7 @@
       else dlg.setAttribute("open", "");
     }
     dlg.scrollTop = 0;
-    try { history.replaceState(null, "", "#exp-" + id); } catch (e) {}
+    try { history.replaceState(null, "", (FAIR[id] ? "#fair-" : "#exp-") + id); } catch (e) {}
   }
 
   function closeExp() {
@@ -1812,7 +2318,7 @@
 
   function onClosed() {
     currentExp = null;
-    if (location.hash.indexOf("#exp-") === 0) {
+    if (/^#(exp|fair)-/.test(location.hash)) {
       try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
     }
     if (lastTrigger) { try { lastTrigger.focus({ preventScroll: true }); } catch (e) {} }
@@ -1844,8 +2350,8 @@
   });
 
   // 網址帶 #exp-代號 時直接打開，方便老師把某個實驗的連結傳給學生
-  var hashMatch = location.hash.match(/^#exp-([\w-]+)$/);
-  if (hashMatch && EXPERIMENTS[hashMatch[1]]) openExp(hashMatch[1]);
+  var hashMatch = location.hash.match(/^#(exp|fair)-([\w-]+)$/);
+  if (hashMatch && (hashMatch[1] === "exp" ? EXPERIMENTS : FAIR)[hashMatch[2]]) openExp(hashMatch[2]);
 
   // ============================================================
   // YouTube 影片：按縮圖跳出小視窗播放（youtube-nocookie 隱私強化模式）
